@@ -1,0 +1,46 @@
+version: "3.8"
+services:
+  mongodb:
+    image: "mongo"
+    container_name: mongodb
+    # networks:
+    #   - goals-net
+    volumes:
+      - data:/data/db
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=test
+      - MONGO_INITDB_ROOT_PASSWORD=secret
+  backend:
+    container_name: server
+    image: romakvikvinia/server
+    build:
+      context: ./server
+      dockerfile: Dockerfile
+    ports:
+      - "3001:3001"
+    volumes:
+      - ./server:/app
+      - /app/node_modules
+    environment:
+      - MONGODB_USERNAME=test
+      - MONGODB_PASSWORD=secret
+    depends_on:
+      - mongodb
+
+  frontend:
+    container_name: client
+    image: romakvikvinia/client
+    build:
+      context: ./client
+      dockerfile: Dockerfile
+
+    volumes:
+      - ./client/src:/app/src
+    ports:
+      - "3000:3000"
+    stdin_open: true # -i
+    tty: true
+    depends_on:
+      - backend
+volumes:
+  data:
