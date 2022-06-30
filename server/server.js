@@ -1,7 +1,6 @@
 const mongoose = require("mongoose");
 const Document = require("./Document");
 mongoose.connect(
-  // "mongodb+srv://root:Theneoio123@google-docs.qvefy.mongodb.net/?retryWrites=true&w=majority"
   `mongodb://${process.env.MONGODB_USERNAME}:${process.env.MONGODB_PASSWORD}@mongodb:27017/course-goals?authSource=admin`
 );
 
